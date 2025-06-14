@@ -20,6 +20,7 @@
             background: #1e1f22;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
         }
 
         .container {
@@ -28,17 +29,56 @@
             padding: 0 24px;
         }
 
-        /* Header */
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: #1e1f22;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(53, 146, 196, 0.03) 0%, transparent 25%),
+                radial-gradient(circle at 75% 75%, rgba(53, 146, 196, 0.05) 0%, transparent 30%),
+                radial-gradient(circle at 50% 50%, rgba(53, 146, 196, 0.02) 0%, transparent 40%);
+            animation: bgFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: rotate(0deg) scale(1); }
+            33% { transform: rotate(2deg) scale(1.05); }
+            66% { transform: rotate(-1deg) scale(0.95); }
+        }
+
+        /* Enhanced Header */
         header {
             background: rgba(30, 31, 34, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #2b2d30;
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(53, 146, 196, 0.2);
             padding: 1rem 0;
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 1000;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        header.scrolled {
+            background: rgba(30, 31, 34, 0.98);
+            border-bottom-color: rgba(53, 146, 196, 0.4);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         nav {
@@ -50,8 +90,18 @@
         .logo {
             font-size: 1.75rem;
             font-weight: 700;
-            color: #3592c4;
+            background: linear-gradient(45deg, #3592c4, #2c82b4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             letter-spacing: -0.025em;
+            position: relative;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes logoGlow {
+            0%, 100% { filter: drop-shadow(0 0 5px rgba(53, 146, 196, 0.3)); }
+            50% { filter: drop-shadow(0 0 15px rgba(53, 146, 196, 0.5)); }
         }
 
         .nav-links {
@@ -65,33 +115,85 @@
             text-decoration: none;
             font-weight: 500;
             font-size: 0.95rem;
-            transition: color 0.2s ease;
-            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(53, 146, 196, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
         }
 
         .nav-links a:hover {
             color: #3592c4;
+            background: rgba(53, 146, 196, 0.1);
+            transform: translateY(-2px);
         }
 
-        /* Hero Section */
+        /* Enhanced Hero Section */
         .hero {
-            background: #1e1f22;
+            background: linear-gradient(135deg, #1e1f22 0%, #2b2d30 100%);
             padding: 8rem 0 6rem;
             margin-top: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(53, 146, 196, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(53, 146, 196, 0.08) 0%, transparent 50%);
+            animation: heroAnim 15s ease-in-out infinite;
+        }
+
+        @keyframes heroAnim {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
         }
 
         .hero-content {
             text-align: center;
             max-width: 800px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
 
         .hero h1 {
             font-size: 3.5rem;
             font-weight: 700;
-            color: #ffffff;
+            background: linear-gradient(45deg, #ffffff, #3592c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 1.5rem;
             letter-spacing: -0.025em;
+            animation: titleSlideIn 1s ease-out;
+            text-shadow: 0 0 30px rgba(53, 146, 196, 0.5);
+        }
+
+        @keyframes titleSlideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .hero-tagline {
@@ -100,6 +202,7 @@
             margin-bottom: 1rem;
             font-style: italic;
             font-weight: 400;
+            animation: fadeInUp 1s ease-out 0.3s both;
         }
 
         .hero-principles {
@@ -108,6 +211,8 @@
             margin-bottom: 2rem;
             font-weight: 500;
             letter-spacing: 0.05em;
+            animation: fadeInUp 1s ease-out 0.6s both;
+            text-shadow: 0 0 20px rgba(53, 146, 196, 0.3);
         }
 
         .hero-description {
@@ -118,44 +223,92 @@
             max-width: 700px;
             margin-left: auto;
             margin-right: auto;
+            animation: fadeInUp 1s ease-out 0.9s both;
         }
 
+        @keyframes fadeInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Enhanced CTA Button */
         .cta-button {
             display: inline-block;
-            background: #3592c4;
+            background: linear-gradient(45deg, #3592c4, #2c82b4);
             color: white;
-            padding: 0.875rem 2rem;
+            padding: 1rem 2.5rem;
             text-decoration: none;
-            border-radius: 8px;
-            font-weight: 500;
+            border-radius: 50px;
+            font-weight: 600;
             font-size: 1rem;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             border: none;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(53, 146, 196, 0.3);
+            animation: fadeInUp 1s ease-out 1.2s both;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
         }
 
         .cta-button:hover {
-            background: #2c82b4;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(53, 146, 196, 0.3);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(53, 146, 196, 0.4);
         }
 
         /* Section Styling */
         .section {
             padding: 5rem 0;
+            position: relative;
         }
 
         .section-dark {
-            background: #2b2d30;
+            background: linear-gradient(135deg, #2b2d30 0%, #1e1f22 100%);
+            position: relative;
+        }
+
+        .section-dark::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(53, 146, 196, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(53, 146, 196, 0.05) 0%, transparent 50%);
         }
 
         .section-title {
             text-align: center;
             font-size: 2.5rem;
-            color: #ffffff;
+            background: linear-gradient(45deg, #ffffff, #3592c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 1rem;
             font-weight: 700;
             letter-spacing: -0.025em;
+            animation: titleFadeIn 0.8s ease-out;
+        }
+
+        @keyframes titleFadeIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .section-subtitle {
@@ -166,27 +319,54 @@
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
+            animation: subtitleFadeIn 0.8s ease-out 0.2s both;
         }
 
-        /* Cards */
+        @keyframes subtitleFadeIn {
+            from { transform: translateY(15px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Enhanced Cards */
         .card {
-            background: #2b2d30;
-            border: 1px solid #43454a;
-            border-radius: 12px;
+            background: rgba(43, 45, 48, 0.8);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            border-radius: 16px;
             padding: 1.5rem;
-            transition: all 0.2s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(53, 146, 196, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover::before {
+            opacity: 1;
         }
 
         .card:hover {
             border-color: #3592c4;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(53, 146, 196, 0.2);
+            transform: translateY(-8px) scale(1.02);
         }
 
         /* About Section */
         .about-content {
             max-width: 900px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
 
         .about-text {
@@ -199,15 +379,35 @@
         .about-text strong {
             color: #3592c4;
             font-weight: 600;
+            text-shadow: 0 0 10px rgba(53, 146, 196, 0.3);
         }
 
         .tech-highlight {
-            background: #2b2d30;
-            border: 1px solid #43454a;
+            background: linear-gradient(135deg, rgba(43, 45, 48, 0.9) 0%, rgba(30, 31, 34, 0.9) 100%);
+            border: 1px solid rgba(67, 69, 74, 0.5);
             border-left: 4px solid #3592c4;
             padding: 2rem;
             margin: 3rem 0;
-            border-radius: 12px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-highlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(53, 146, 196, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tech-highlight:hover::before {
+            opacity: 1;
         }
 
         .tech-highlight h3 {
@@ -215,20 +415,42 @@
             margin-bottom: 1rem;
             font-weight: 600;
             font-size: 1.25rem;
+            text-shadow: 0 0 15px rgba(53, 146, 196, 0.4);
         }
 
         .tech-highlight p {
             color: #bbc0c6;
             line-height: 1.7;
+            position: relative;
+            z-index: 2;
         }
 
         .disclaimer {
-            background: #2d251a;
-            border: 1px solid #5d4e37;
+            background: linear-gradient(135deg, rgba(45, 37, 26, 0.9) 0%, rgba(30, 31, 34, 0.9) 100%);
+            border: 1px solid rgba(93, 78, 55, 0.5);
             border-left: 4px solid #ff9500;
             padding: 1.5rem;
             margin: 2rem 0;
-            border-radius: 12px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .disclaimer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(255, 149, 0, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .disclaimer:hover::before {
+            opacity: 1;
         }
 
         .disclaimer h4 {
@@ -236,33 +458,57 @@
             margin-bottom: 0.5rem;
             font-weight: 600;
             font-size: 1rem;
+            text-shadow: 0 0 15px rgba(255, 149, 0, 0.4);
+            position: relative;
+            z-index: 2;
         }
 
         .disclaimer p {
             color: #d4b896;
             font-size: 0.95rem;
             line-height: 1.6;
+            position: relative;
+            z-index: 2;
         }
 
         .tech-specs {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
+            gap: 2rem;
             margin: 3rem 0;
         }
 
         .tech-spec {
-            background: #2b2d30;
-            border: 1px solid #43454a;
-            padding: 1.5rem;
-            border-radius: 12px;
-            transition: all 0.2s ease;
+            background: linear-gradient(135deg, rgba(43, 45, 48, 0.8) 0%, rgba(30, 31, 34, 0.8) 100%);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            padding: 2rem;
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-spec::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(53, 146, 196, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tech-spec:hover::before {
+            opacity: 1;
         }
 
         .tech-spec:hover {
             border-color: #3592c4;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(53, 146, 196, 0.2);
         }
 
         .tech-spec h4 {
@@ -270,40 +516,73 @@
             margin-bottom: 1rem;
             font-size: 1.125rem;
             font-weight: 600;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 15px rgba(53, 146, 196, 0.4);
         }
 
         .tech-spec p {
             color: #bbc0c6;
             font-size: 0.95rem;
             line-height: 1.6;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Features */
+        /* Enhanced Features */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+            gap: 2rem;
             margin-top: 3rem;
         }
 
         .feature-card {
-            background: #2b2d30;
-            border: 1px solid #43454a;
-            padding: 1.5rem;
-            border-radius: 12px;
-            transition: all 0.2s ease;
+            background: linear-gradient(135deg, rgba(43, 45, 48, 0.8) 0%, rgba(30, 31, 34, 0.8) 100%);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            padding: 2rem;
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(53, 146, 196, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
         }
 
         .feature-card:hover {
             border-color: #3592c4;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(53, 146, 196, 0.3);
         }
 
         .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
             display: block;
+            filter: drop-shadow(0 0 10px rgba(53, 146, 196, 0.3));
+            animation: iconFloat 3s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         .feature-card h3 {
@@ -311,56 +590,80 @@
             font-size: 1.25rem;
             margin-bottom: 1rem;
             font-weight: 600;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
 
         .feature-card p {
             color: #bbc0c6;
             line-height: 1.6;
             font-size: 0.95rem;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Pricing */
+        /* Enhanced Pricing */
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
+            gap: 2rem;
             margin-top: 3rem;
         }
 
         .pricing-card {
-            background: #2b2d30;
-            border: 1px solid #43454a;
-            border-radius: 12px;
-            padding: 2rem;
+            background: linear-gradient(135deg, rgba(43, 45, 48, 0.9) 0%, rgba(30, 31, 34, 0.9) 100%);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            border-radius: 20px;
+            padding: 2.5rem;
             text-align: center;
             position: relative;
-            transition: all 0.2s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(15px);
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(53, 146, 196, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .pricing-card:hover::before {
+            opacity: 1;
         }
 
         .pricing-card:hover {
             border-color: #3592c4;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(53, 146, 196, 0.3);
         }
 
         .pricing-card.popular {
-            border-color: #3592c4;
-            border-width: 2px;
+            border: 2px solid #3592c4;
             position: relative;
+            box-shadow: 0 0 30px rgba(53, 146, 196, 0.2);
         }
 
-        .pricing-card.popular::before {
+        .pricing-card.popular::after {
             content: '推薦';
             position: absolute;
             top: -1px;
             left: 50%;
             transform: translateX(-50%);
-            background: #3592c4;
+            background: linear-gradient(45deg, #3592c4, #2c82b4);
             color: white;
             padding: 0.5rem 1rem;
             font-size: 0.875rem;
             font-weight: 500;
             border-radius: 0 0 8px 8px;
+            box-shadow: 0 4px 15px rgba(53, 146, 196, 0.4);
         }
 
         .pricing-card h3 {
@@ -368,25 +671,38 @@
             font-size: 1.5rem;
             margin-bottom: 1rem;
             font-weight: 600;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
         }
 
         .price {
             font-size: 3rem;
-            color: #3592c4;
+            background: linear-gradient(45deg, #3592c4, #2c82b4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-weight: 700;
             margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 20px rgba(53, 146, 196, 0.5);
         }
 
         .price-period {
             color: #9aa7b0;
             margin-bottom: 2rem;
             font-size: 1rem;
+            position: relative;
+            z-index: 2;
         }
 
         .pricing-features {
             list-style: none;
             margin-bottom: 2rem;
             text-align: left;
+            position: relative;
+            z-index: 2;
         }
 
         .pricing-features li {
@@ -395,6 +711,7 @@
             position: relative;
             padding-left: 1.5rem;
             font-size: 0.95rem;
+            transition: color 0.2s ease;
         }
 
         .pricing-features li::before {
@@ -403,6 +720,11 @@
             font-weight: 600;
             position: absolute;
             left: 0;
+            text-shadow: 0 0 10px rgba(77, 179, 61, 0.5);
+        }
+
+        .pricing-features li:hover {
+            color: #ffffff;
         }
 
         .pricing-footnote {
@@ -412,25 +734,45 @@
             font-size: 0.875rem;
         }
 
-        /* Contact */
+        /* Enhanced Contact */
         .contact-email {
             text-align: center;
             margin: 3rem 0;
         }
 
         .email-card {
-            background: #2b2d30;
-            border: 1px solid #43454a;
-            border-radius: 12px;
-            padding: 2rem;
+            background: linear-gradient(135deg, rgba(43, 45, 48, 0.9) 0%, rgba(30, 31, 34, 0.9) 100%);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            border-radius: 20px;
+            padding: 2.5rem;
             max-width: 400px;
             margin: 0 auto;
-            transition: all 0.2s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .email-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(53, 146, 196, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .email-card:hover::before {
+            opacity: 1;
         }
 
         .email-card:hover {
             border-color: #3592c4;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(53, 146, 196, 0.2);
+            transform: translateY(-5px) scale(1.02);
         }
 
         .email-card h3 {
@@ -438,33 +780,56 @@
             margin-bottom: 1rem;
             font-size: 1.25rem;
             font-weight: 600;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
         }
 
         .email-card p {
             color: #9aa7b0;
             margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
         }
 
         .email-link {
-            background: #3592c4;
+            background: linear-gradient(45deg, #3592c4, #2c82b4);
             color: white;
-            padding: 0.75rem 1.5rem;
+            padding: 0.875rem 1.5rem;
             text-decoration: none;
-            border-radius: 8px;
+            border-radius: 50px;
             font-weight: 500;
             display: inline-block;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(53, 146, 196, 0.3);
+        }
+
+        .email-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .email-link:hover::before {
+            left: 100%;
         }
 
         .email-link:hover {
-            background: #2c82b4;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(53, 146, 196, 0.3);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(53, 146, 196, 0.4);
         }
 
         .contact-divider {
             text-align: center;
-            margin: 2rem 0;
+            margin: 3rem 0;
             position: relative;
         }
 
@@ -475,7 +840,7 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: #43454a;
+            background: linear-gradient(90deg, transparent, #43454a, transparent);
             z-index: 1;
         }
 
@@ -490,14 +855,35 @@
         .contact-form {
             max-width: 600px;
             margin: 0 auto;
-            background: #2b2d30;
-            border: 1px solid #43454a;
-            padding: 2rem;
-            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(43, 45, 48, 0.9) 0%, rgba(30, 31, 34, 0.9) 100%);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            padding: 2.5rem;
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(53, 146, 196, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .contact-form:hover::before {
+            opacity: 1;
         }
 
         .form-group {
             margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
         }
 
         .form-group label {
@@ -506,20 +892,22 @@
             margin-bottom: 0.5rem;
             font-weight: 500;
             font-size: 0.95rem;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
             width: 100%;
-            padding: 0.75rem;
-            background: #1e1f22;
-            border: 1px solid #43454a;
-            border-radius: 8px;
+            padding: 0.875rem;
+            background: rgba(30, 31, 34, 0.8);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            border-radius: 12px;
             color: #bbc0c6;
             font-size: 1rem;
-            transition: border-color 0.2s ease;
+            transition: all 0.3s ease;
             font-family: inherit;
+            backdrop-filter: blur(10px);
         }
 
         .form-group input:focus,
@@ -527,7 +915,8 @@
         .form-group textarea:focus {
             outline: none;
             border-color: #3592c4;
-            box-shadow: 0 0 0 3px rgba(53, 146, 196, 0.1);
+            box-shadow: 0 0 0 3px rgba(53, 146, 196, 0.1), 0 0 20px rgba(53, 146, 196, 0.2);
+            background: rgba(30, 31, 34, 0.9);
         }
 
         .form-group input::placeholder,
@@ -536,35 +925,68 @@
         }
 
         .form-button {
-            background: #3592c4;
+            background: linear-gradient(45deg, #3592c4, #2c82b4);
             color: white;
-            padding: 0.875rem 2rem;
+            padding: 1rem 2rem;
             border: none;
-            border-radius: 8px;
+            border-radius: 50px;
             font-weight: 500;
             font-size: 1rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(53, 146, 196, 0.3);
+        }
+
+        .form-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .form-button:hover::before {
+            left: 100%;
         }
 
         .form-button:hover {
-            background: #2c82b4;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(53, 146, 196, 0.3);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(53, 146, 196, 0.4);
         }
 
-        /* Footer */
+        /* Enhanced Footer */
         footer {
-            background: #1e1f22;
-            border-top: 1px solid #2b2d30;
+            background: linear-gradient(135deg, #1e1f22 0%, #2b2d30 100%);
+            border-top: 1px solid rgba(53, 146, 196, 0.2);
             color: #bbc0c6;
             text-align: center;
             padding: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 50%, rgba(53, 146, 196, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 70% 50%, rgba(53, 146, 196, 0.03) 0%, transparent 50%);
         }
 
         .footer-content {
             max-width: 600px;
             margin: 0 auto;
+            position: relative;
+            z-index: 2;
         }
 
         .footer-tagline {
@@ -572,6 +994,7 @@
             margin-bottom: 1rem;
             font-style: italic;
             font-size: 1.1rem;
+            text-shadow: 0 0 15px rgba(154, 167, 176, 0.3);
         }
 
         .footer-text {
@@ -581,9 +1004,9 @@
 
         /* Code block styling */
         .code-block {
-            background: #1e1f22;
-            border: 1px solid #43454a;
-            border-radius: 8px;
+            background: rgba(30, 31, 34, 0.9);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            border-radius: 12px;
             padding: 1rem;
             font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
             font-size: 0.9rem;
@@ -593,11 +1016,12 @@
             white-space: pre-wrap;
             max-height: 300px;
             overflow-y: auto;
+            backdrop-filter: blur(10px);
         }
 
         /* Global Infrastructure Section */
         .infrastructure-hero {
-            background: #1e1f22;
+            background: linear-gradient(135deg, #1e1f22 0%, #2b2d30 100%);
             padding: 4rem 0;
             text-align: center;
             position: relative;
@@ -612,9 +1036,15 @@
             right: 0;
             bottom: 0;
             background: 
-                radial-gradient(circle at 20% 30%, rgba(53, 146, 196, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(53, 146, 196, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 20% 30%, rgba(53, 146, 196, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(53, 146, 196, 0.12) 0%, transparent 50%);
             z-index: 1;
+            animation: infraBg 20s ease-in-out infinite;
+        }
+
+        @keyframes infraBg {
+            0%, 100% { opacity: 0.7; transform: scale(1) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.1) rotate(2deg); }
         }
 
         .infrastructure-hero > * {
@@ -632,14 +1062,28 @@
 
         .infrastructure-stat {
             text-align: center;
+            padding: 1rem;
+            background: rgba(43, 45, 48, 0.3);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .infrastructure-stat:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: rgba(53, 146, 196, 0.1);
         }
 
         .stat-number {
             font-size: 2.5rem;
             font-weight: 700;
-            color: #3592c4;
+            background: linear-gradient(45deg, #3592c4, #2c82b4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             display: block;
             line-height: 1;
+            text-shadow: 0 0 20px rgba(53, 146, 196, 0.5);
         }
 
         .stat-label {
@@ -657,13 +1101,14 @@
         }
 
         .region-card {
-            background: #2b2d30;
-            border: 1px solid #43454a;
-            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(43, 45, 48, 0.9) 0%, rgba(30, 31, 34, 0.9) 100%);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            border-radius: 20px;
             padding: 2rem;
-            transition: all 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(15px);
         }
 
         .region-card::before {
@@ -674,13 +1119,29 @@
             right: 0;
             height: 4px;
             background: linear-gradient(90deg, #3592c4, #2c82b4);
-            border-radius: 16px 16px 0 0;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .region-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(53, 146, 196, 0.1) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .region-card:hover::after {
+            opacity: 1;
         }
 
         .region-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-12px) scale(1.03);
             border-color: #3592c4;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(53, 146, 196, 0.3);
         }
 
         .region-header {
@@ -688,6 +1149,8 @@
             align-items: center;
             justify-content: space-between;
             margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
         }
 
         .region-name {
@@ -697,45 +1160,52 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
         }
 
         .region-flag {
             font-size: 1.2rem;
+            filter: drop-shadow(0 0 10px rgba(53, 146, 196, 0.3));
         }
 
         .region-count {
-            background: #3592c4;
+            background: linear-gradient(45deg, #3592c4, #2c82b4);
             color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 12px;
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
             font-size: 0.8rem;
             font-weight: 600;
+            box-shadow: 0 4px 15px rgba(53, 146, 196, 0.3);
         }
 
         .partners-grid {
             display: grid;
             gap: 0.8rem;
+            position: relative;
+            z-index: 2;
         }
 
         .partner-row {
             display: flex;
             align-items: center;
             gap: 0.8rem;
-            padding: 0.8rem;
-            background: #1e1f22;
-            border: 1px solid #43454a;
-            border-radius: 8px;
-            transition: all 0.2s ease;
+            padding: 1rem;
+            background: rgba(30, 31, 34, 0.6);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
 
         .partner-row:hover {
             border-color: #3592c4;
-            background: rgba(53, 146, 196, 0.05);
+            background: rgba(53, 146, 196, 0.1);
+            transform: translateX(5px);
         }
 
         .partner-type {
-            padding: 0.3rem 0.6rem;
-            border-radius: 6px;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
             font-size: 0.75rem;
             font-weight: 600;
             min-width: 60px;
@@ -746,18 +1216,21 @@
             background: rgba(53, 146, 196, 0.2);
             color: #3592c4;
             border: 1px solid rgba(53, 146, 196, 0.3);
+            box-shadow: 0 0 10px rgba(53, 146, 196, 0.2);
         }
 
         .partner-type.telecom {
             background: rgba(77, 179, 61, 0.2);
             color: #4db33d;
             border: 1px solid rgba(77, 179, 61, 0.3);
+            box-shadow: 0 0 10px rgba(77, 179, 61, 0.2);
         }
 
         .partner-type.idc {
             background: rgba(255, 149, 0, 0.2);
             color: #ff9500;
             border: 1px solid rgba(255, 149, 0, 0.3);
+            box-shadow: 0 0 10px rgba(255, 149, 0, 0.2);
         }
 
         .partner-name {
@@ -767,19 +1240,22 @@
         }
 
         .partner-special {
-            padding: 0.2rem 0.6rem;
+            padding: 0.3rem 0.8rem;
             background: rgba(255, 149, 0, 0.1);
             border: 1px solid rgba(255, 149, 0, 0.3);
             color: #ff9500;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 0.7rem;
             font-weight: 500;
+            box-shadow: 0 0 8px rgba(255, 149, 0, 0.2);
         }
 
         .region-features {
             margin-top: 1.5rem;
             padding-top: 1.5rem;
-            border-top: 1px solid #43454a;
+            border-top: 1px solid rgba(67, 69, 74, 0.5);
+            position: relative;
+            z-index: 2;
         }
 
         .feature-tags {
@@ -792,19 +1268,46 @@
             background: rgba(53, 146, 196, 0.1);
             border: 1px solid rgba(53, 146, 196, 0.3);
             color: #3592c4;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
+            padding: 0.4rem 1rem;
+            border-radius: 25px;
             font-size: 0.8rem;
             font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(53, 146, 196, 0.1);
+        }
+
+        .feature-tag:hover {
+            background: rgba(53, 146, 196, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(53, 146, 196, 0.3);
         }
 
         .coverage-map {
-            background: #2b2d30;
-            border: 1px solid #43454a;
-            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(43, 45, 48, 0.9) 0%, rgba(30, 31, 34, 0.9) 100%);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            border-radius: 20px;
             padding: 2rem;
             margin: 3rem 0;
             text-align: center;
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .coverage-map::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(53, 146, 196, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .coverage-map:hover::before {
+            opacity: 1;
         }
 
         .map-connections {
@@ -814,10 +1317,12 @@
             gap: 2rem;
             margin: 2rem 0;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
         }
 
         .map-node {
-            background: #1e1f22;
+            background: linear-gradient(135deg, rgba(30, 31, 34, 0.9) 0%, rgba(43, 45, 48, 0.9) 100%);
             border: 2px solid #3592c4;
             border-radius: 50%;
             width: 80px;
@@ -827,17 +1332,21 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px rgba(53, 146, 196, 0.3);
         }
 
         .map-node:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 20px rgba(53, 146, 196, 0.4);
+            transform: scale(1.15);
+            box-shadow: 0 0 30px rgba(53, 146, 196, 0.6);
+            border-color: #2c82b4;
         }
 
         .map-node-flag {
             font-size: 1.5rem;
             margin-bottom: 0.2rem;
+            filter: drop-shadow(0 0 5px rgba(53, 146, 196, 0.3));
         }
 
         .map-node-name {
@@ -849,23 +1358,311 @@
         .connection-line {
             width: 60px;
             height: 2px;
-            background: linear-gradient(90deg, #3592c4, transparent, #3592c4);
+            background: linear-gradient(90deg, #3592c4, rgba(53, 146, 196, 0.5), #3592c4);
             position: relative;
             animation: dataFlow 3s ease-in-out infinite;
+            box-shadow: 0 0 10px rgba(53, 146, 196, 0.5);
         }
 
         @keyframes dataFlow {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+            0%, 100% { 
+                opacity: 0.3; 
+                transform: scaleX(1);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scaleX(1.1);
+            }
         }
 
+        /* Enhanced Technology Stack */
+        .tech-stack {
+            background: linear-gradient(135deg, rgba(43, 45, 48, 0.9) 0%, rgba(30, 31, 34, 0.9) 100%);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tech-stack::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(53, 146, 196, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tech-stack:hover::before {
+            opacity: 1;
+        }
+
+        .tech-stack h4 {
+            color: #3592c4;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 15px rgba(53, 146, 196, 0.4);
+        }
+
+        .tech-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .tech-tag {
+            background: rgba(30, 31, 34, 0.8);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            color: #bbc0c6;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .tech-tag:hover {
+            border-color: #3592c4;
+            color: #3592c4;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 15px rgba(53, 146, 196, 0.2);
+        }
+
+        /* Enhanced Architecture Diagram */
+        .architecture-diagram {
+            background: linear-gradient(135deg, rgba(43, 45, 48, 0.9) 0%, rgba(30, 31, 34, 0.9) 100%);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .architecture-diagram::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(53, 146, 196, 0.05) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .architecture-diagram:hover::before {
+            opacity: 1;
+        }
+
+        .diagram-flow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1rem 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .diagram-node {
+            background: linear-gradient(135deg, rgba(30, 31, 34, 0.9) 0%, rgba(43, 45, 48, 0.9) 100%);
+            border: 1px solid #3592c4;
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            color: #3592c4;
+            font-size: 0.9rem;
+            font-weight: 500;
+            min-width: 100px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 15px rgba(53, 146, 196, 0.2);
+        }
+
+        .diagram-node:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(53, 146, 196, 0.4);
+        }
+
+        .diagram-arrow {
+            color: #3592c4;
+            font-size: 1.2rem;
+            animation: arrowPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes arrowPulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        /* Enhanced Security Badges */
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .security-badge {
+            background: linear-gradient(135deg, rgba(30, 31, 34, 0.9) 0%, rgba(43, 45, 48, 0.9) 100%);
+            border: 1px solid rgba(67, 69, 74, 0.5);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #bbc0c6;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .security-badge:hover {
+            border-color: #4db33d;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(77, 179, 61, 0.2);
+        }
+
+        /* Scroll Progress Indicator */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #3592c4, #2c82b4);
+            z-index: 9999;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 10px rgba(53, 146, 196, 0.5);
+        }
+
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.7; transform: translateX(-100%); }
+            50% { opacity: 1; transform: translateX(100%); }
+        }
+
+        /* Enhanced Mobile Responsiveness */
         @media (max-width: 768px) {
-            .infrastructure-stats {
-                gap: 2rem;
+            .hero h1 {
+                font-size: 2.5rem;
             }
             
+            .hero-tagline {
+                font-size: 1.1rem;
+            }
+
+            .hero-description {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .cta-button {
+                padding: 0.875rem 2rem;
+                font-size: 0.95rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .section {
+                padding: 3rem 0;
+            }
+
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 0.8rem;
+            }
+
+            .section-subtitle {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+            
+            .features-grid,
+            .pricing-grid,
+            .tech-specs,
             .regions-grid {
                 grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .pricing-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .pricing-card h3 {
+                font-size: 1.3rem;
+            }
+
+            .price-consultation div:first-child {
+                font-size: 1.8rem;
+            }
+
+            .feature-card {
+                padding: 1.5rem;
+            }
+
+            .feature-card h3 {
+                font-size: 1.1rem;
+            }
+
+            .feature-icon {
+                font-size: 2rem;
+                margin-bottom: 1rem;
+            }
+
+            .tech-spec {
+                padding: 1.5rem;
+            }
+
+            .tech-spec h4 {
+                font-size: 1rem;
+            }
+
+            .infrastructure-stats {
+                gap: 1.5rem;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .infrastructure-stat {
+                min-width: 120px;
+                padding: 0.8rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+
+            .stat-label {
+                font-size: 0.85rem;
             }
             
             .map-connections {
@@ -878,295 +1675,588 @@
                 height: 40px;
                 transform: rotate(90deg);
             }
-        }
-        .tech-stack {
-            background: #2b2d30;
-            border: 1px solid #43454a;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-        }
 
-        .tech-stack h4 {
-            color: #3592c4;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
+            .map-node {
+                width: 70px;
+                height: 70px;
+            }
 
-        .tech-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
+            .map-node-flag {
+                font-size: 1.3rem;
+            }
 
-        .tech-tag {
-            background: #1e1f22;
-            border: 1px solid #43454a;
-            color: #bbc0c6;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-        }
+            .region-card {
+                padding: 1.5rem;
+            }
 
-        .tech-tag:hover {
-            border-color: #3592c4;
-            color: #3592c4;
-        }
+            .region-name {
+                font-size: 1.3rem;
+            }
 
-        .architecture-diagram {
-            background: #2b2d30;
-            border: 1px solid #43454a;
-            border-radius: 8px;
-            padding: 2rem;
-            margin: 2rem 0;
-            text-align: center;
-        }
+            .partner-row {
+                padding: 0.8rem;
+                gap: 0.6rem;
+            }
 
-        .diagram-flow {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin: 1rem 0;
-        }
+            .partner-type {
+                font-size: 0.7rem;
+                padding: 0.3rem 0.6rem;
+                min-width: 50px;
+            }
 
-        .diagram-node {
-            background: #1e1f22;
-            border: 1px solid #3592c4;
-            border-radius: 6px;
-            padding: 0.8rem 1rem;
-            color: #3592c4;
-            font-size: 0.9rem;
-            font-weight: 500;
-            min-width: 100px;
-            text-align: center;
-        }
+            .partner-name {
+                font-size: 0.9rem;
+            }
 
-        .diagram-arrow {
-            color: #3592c4;
-            font-size: 1.2rem;
-        }
+            .feature-tags {
+                justify-content: center;
+            }
 
-        .security-badges {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin: 2rem 0;
-            flex-wrap: wrap;
-        }
+            .feature-tag {
+                font-size: 0.75rem;
+                padding: 0.3rem 0.8rem;
+            }
 
-        .security-badge {
-            background: #1e1f22;
-            border: 1px solid #43454a;
-            border-radius: 6px;
-            padding: 0.8rem 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
-            color: #bbc0c6;
-            transition: all 0.2s ease;
-        }
-
-        .security-badge:hover {
-            border-color: #4db33d;
-        }
-
-        .uptime-chart {
-            background: #2b2d30;
-            border: 1px solid #43454a;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-        }
-
-        .uptime-bars {
-            display: flex;
-            gap: 2px;
-            height: 60px;
-            align-items: end;
-            margin-top: 1rem;
-        }
-
-        .uptime-bar {
-            flex: 1;
-            background: #4db33d;
-            border-radius: 2px 2px 0 0;
-            min-width: 3px;
-            animation: barGrow 0.5s ease;
-            animation-delay: calc(var(--index) * 0.05s);
-        }
-
-        .uptime-bar.degraded {
-            background: #ff9500;
-        }
-
-        @keyframes barGrow {
-            from { transform: scaleY(0); }
-            to { transform: scaleY(1); }
-        }
-
-        .network-topology {
-            background: #2b2d30;
-            border: 1px solid #43454a;
-            border-radius: 8px;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-
-        .topology-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .topology-node {
-            background: #1e1f22;
-            border: 1px solid #43454a;
-            border-radius: 8px;
-            padding: 1rem;
-            text-align: center;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .topology-node:hover {
-            border-color: #3592c4;
-            transform: translateY(-2px);
-        }
-
-        .topology-node::before {
-            content: attr(data-ping);
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #4db33d;
-            color: white;
-            font-size: 0.7rem;
-            padding: 0.2rem 0.4rem;
-            border-radius: 4px;
-            font-weight: 500;
-        }
-
-        .node-location {
-            font-size: 0.8rem;
-            color: #3592c4;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-        }
-
-        .node-provider {
-            font-size: 0.7rem;
-            color: #9aa7b0;
-        }
-
-        .feature-comparison {
-            background: #2b2d30;
-            border: 1px solid #43454a;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-            overflow-x: auto;
-        }
-
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-
-        .comparison-table th {
-            background: #1e1f22;
-            color: #3592c4;
-            padding: 0.8rem;
-            text-align: left;
-            border: 1px solid #43454a;
-            font-weight: 600;
-        }
-
-        .comparison-table td {
-            padding: 0.8rem;
-            border: 1px solid #43454a;
-            color: #bbc0c6;
-        }
-
-        .comparison-table tr:hover {
-            background: rgba(53, 146, 196, 0.05);
-        }
-
-        .check-mark {
-            color: #4db33d;
-            font-weight: bold;
-        }
-
-        .x-mark {
-            color: #ff6b6b;
-            font-weight: bold;
-        }
-
-        @media (max-width: 768px) {
             .diagram-flow {
                 flex-direction: column;
+                gap: 0.8rem;
             }
             
             .diagram-arrow {
                 transform: rotate(90deg);
+                font-size: 1rem;
+            }
+
+            .diagram-node {
+                padding: 0.8rem 1.2rem;
+                font-size: 0.85rem;
+                min-width: 80px;
             }
             
             .security-badges {
                 flex-direction: column;
                 align-items: center;
+                gap: 0.8rem;
             }
-        }
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
+
+            .security-badge {
+                padding: 0.8rem 1.2rem;
+                font-size: 0.85rem;
             }
-            
-            .hero-tagline {
+
+            .tech-tags {
+                justify-content: center;
+            }
+
+            .tech-tag {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+
+            .email-card {
+                padding: 2rem 1.5rem;
+                max-width: none;
+                margin: 0 1rem;
+            }
+
+            .contact-form {
+                padding: 2rem 1.5rem;
+                margin: 0 1rem;
+            }
+
+            .form-group {
+                margin-bottom: 1.2rem;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 0.75rem;
+                font-size: 0.95rem;
+            }
+
+            .form-button {
+                width: 100%;
+                padding: 1rem;
+            }
+
+            .contact-divider {
+                margin: 2rem 0;
+            }
+
+            .contact-divider span {
+                padding: 0 1rem;
+                font-size: 0.9rem;
+            }
+
+            .footer-tagline {
+                font-size: 1rem;
+            }
+
+            .footer-text {
+                font-size: 0.85rem;
+            }
+
+            /* Mobile-specific pricing adjustments */
+            .pricing-card .pricing-features {
+                font-size: 0.9rem;
+            }
+
+            .pricing-card .pricing-features li {
+                padding: 0.4rem 0;
+            }
+
+            /* Mobile tech highlight */
+            .tech-highlight {
+                padding: 1.5rem;
+                margin: 2rem 0;
+            }
+
+            .tech-highlight h3 {
                 font-size: 1.1rem;
             }
-            
-            .nav-links {
-                display: none;
+
+            .disclaimer {
+                padding: 1.2rem;
             }
-            
-            .features-grid,
-            .pricing-grid,
-            .tech-specs {
-                grid-template-columns: 1fr;
+
+            .disclaimer h4 {
+                font-size: 0.95rem;
             }
-            
-            .section {
+
+            .about-text {
+                font-size: 1rem;
+            }
+
+            /* Mobile particles */
+            .particles {
+                display: none; /* Hide particles on mobile for performance */
+            }
+
+            /* Mobile navigation improvements */
+            header {
+                padding: 0.8rem 0;
+            }
+
+            .hero {
+                padding: 6rem 0 4rem;
+                margin-top: 3rem;
+            }
+
+            /* Mobile infrastructure hero */
+            .infrastructure-hero {
                 padding: 3rem 0;
             }
-            
-            .container {
-                padding: 0 1rem;
+
+            /* Better mobile spacing */
+            .architecture-diagram,
+            .tech-stack,
+            .coverage-map {
+                margin: 1.5rem 0;
+                padding: 1.5rem;
+            }
+
+            /* Mobile consultation section */
+            .pricing-grid + div > div {
+                padding: 2rem 1.5rem !important;
+                margin: 2rem 1rem !important;
+            }
+
+            .pricing-grid + div > div > div:last-child > div {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem !important;
+            }
+
+            /* Mobile scroll progress */
+            .scroll-progress {
+                height: 2px;
             }
         }
 
-        /* Subtle animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeIn 0.6s ease forwards;
+        /* Tablet Responsiveness */
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .container {
+                padding: 0 2rem;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .features-grid,
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tech-specs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .regions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .infrastructure-stats {
+                gap: 2rem;
+            }
+
+            .map-connections {
+                gap: 1.5rem;
+            }
         }
 
-        @keyframes fadeIn {
+        /* Large Mobile Devices */
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero-tagline {
+                font-size: 1rem;
+            }
+
+            .hero-principles {
+                font-size: 1rem;
+            }
+
+            .hero-description {
+                font-size: 0.95rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .section-subtitle {
+                font-size: 0.95rem;
+            }
+
+            .cta-button,
+            .email-link,
+            .form-button {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .feature-card,
+            .tech-spec,
+            .pricing-card {
+                padding: 1.2rem;
+            }
+
+            .pricing-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .price-consultation div:first-child {
+                font-size: 1.6rem;
+            }
+
+            .infrastructure-stat {
+                min-width: 100px;
+                padding: 0.6rem;
+            }
+
+            .stat-number {
+                font-size: 1.8rem;
+            }
+
+            .region-card {
+                padding: 1.2rem;
+            }
+
+            .partner-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .partner-type {
+                align-self: flex-start;
+            }
+
+            .feature-tags {
+                gap: 0.4rem;
+            }
+
+            .feature-tag {
+                font-size: 0.7rem;
+                padding: 0.25rem 0.6rem;
+            }
+
+            .contact-form,
+            .email-card {
+                margin: 0 0.5rem;
+                padding: 1.5rem 1rem;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 0.7rem;
+            }
+        }
+
+        /* Performance optimizations for mobile */
+        @media (max-width: 768px) {
+            * {
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+            }
+
+            .bg-animation::before {
+                animation: none; /* Disable complex animations on mobile */
+            }
+
+            .feature-icon {
+                animation: none; /* Disable floating animation on mobile */
+            }
+
+            .diagram-arrow {
+                animation: none; /* Disable pulse animation on mobile */
+            }
+
+            /* Reduce motion for better mobile performance */
+            @media (prefers-reduced-motion: reduce) {
+                * {
+                    animation-duration: 0.01ms !important;
+                    animation-iteration-count: 1 !important;
+                    transition-duration: 0.01ms !important;
+                }
+            }
+        }
+
+        /* Animations and Entrance Effects */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInAnimation 0.8s ease forwards;
+        }
+
+        @keyframes fadeInAnimation {
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
+
+        /* Staggered Animation Delays */
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+        .feature-card:nth-child(5) { animation-delay: 0.5s; }
+        .feature-card:nth-child(6) { animation-delay: 0.6s; }
+        .feature-card:nth-child(7) { animation-delay: 0.7s; }
+        .feature-card:nth-child(8) { animation-delay: 0.8s; }
+
+        .tech-spec:nth-child(1) { animation-delay: 0.1s; }
+        .tech-spec:nth-child(2) { animation-delay: 0.2s; }
+        .tech-spec:nth-child(3) { animation-delay: 0.3s; }
+        .tech-spec:nth-child(4) { animation-delay: 0.4s; }
+        .tech-spec:nth-child(5) { animation-delay: 0.5s; }
+        .tech-spec:nth-child(6) { animation-delay: 0.6s; }
+
+        .pricing-card:nth-child(1) { animation-delay: 0.2s; }
+        .pricing-card:nth-child(2) { animation-delay: 0.4s; }
+        .pricing-card:nth-child(3) { animation-delay: 0.6s; }
+
+        /* Parallax Effect */
+        .parallax-element {
+            transform: translateZ(0);
+            will-change: transform;
+        }
+
+        /* Glitch Effect for Logo */
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        .logo:hover {
+            animation: glitch 0.3s ease-in-out;
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #3592c4;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Enhanced Hover Effects */
+        .region-card .partner-row {
+            transform: translateX(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .region-card:hover .partner-row {
+            transform: translateX(5px);
+        }
+
+        .region-card:hover .partner-row:nth-child(even) {
+            transform: translateX(8px);
+        }
+
+        /* Typing Animation */
+        .typing-animation {
+            overflow: hidden;
+            border-right: 2px solid #3592c4;
+            white-space: nowrap;
+            animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #3592c4; }
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(53, 146, 196, 0.3);
+            border-top: 3px solid #3592c4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Success Animation */
+        .success-checkmark {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: #4db33d;
+            stroke-miterlimit: 10;
+            margin: 0 auto;
+            box-shadow: inset 0px 0px 0px #4db33d;
+            animation: fill 0.4s ease-in-out 0.4s forwards, scale 0.3s ease-in-out 0.9s both;
+        }
+
+        .success-checkmark-check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+
+        @keyframes stroke {
+            100% { stroke-dashoffset: 0; }
+        }
+
+        @keyframes scale {
+            0%, 100% { transform: none; }
+            50% { transform: scale3d(1.1, 1.1, 1); }
+        }
+
+        @keyframes fill {
+            100% { box-shadow: inset 0px 0px 0px 30px #4db33d; }
+        }
+
+        /* Pulse Animation */
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(53, 146, 196, 0.7);
+            }
+            70% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(53, 146, 196, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(53, 146, 196, 0);
+            }
+        }
+
+        /* Enhanced Button Effects */
+        .enhanced-button {
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(0);
+        }
+
+        .enhanced-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .enhanced-button:hover::after {
+            width: 300px;
+            height: 300px;
+        }
     </style>
 </head>
 <body>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress"></div>
+    
+    <!-- Animated Background -->
+    <div class="bg-animation"></div>
+
     <header id="header">
         <nav class="container">
             <div class="logo">H-Net</div>
@@ -1182,6 +2272,19 @@
     </header>
 
     <section id="home" class="hero">
+        <!-- Floating Particles -->
+        <div class="particles">
+            <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+            <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+            <div class="particle" style="left: 40%; animation-delay: 6s;"></div>
+            <div class="particle" style="left: 50%; animation-delay: 8s;"></div>
+            <div class="particle" style="left: 60%; animation-delay: 10s;"></div>
+            <div class="particle" style="left: 70%; animation-delay: 12s;"></div>
+            <div class="particle" style="left: 80%; animation-delay: 14s;"></div>
+            <div class="particle" style="left: 90%; animation-delay: 16s;"></div>
+        </div>
+        
         <div class="container">
             <div class="hero-content">
                 <h1>H-Net</h1>
@@ -1191,7 +2294,7 @@
                     基於多源節點架構與可控虛擬化技術的小型雲計算平台。<br>
                     我們不追求成為最大的，只專注於為技術用戶提供真正可控、可靠的解決方案。
                 </p>
-                <a href="#contact" class="cta-button">了解更多</a>
+                <a href="#contact" class="cta-button enhanced-button">了解更多</a>
             </div>
         </div>
     </section>
@@ -1259,27 +2362,27 @@
                 </div>
 
                 <div class="tech-specs">
-                    <div class="tech-spec">
+                    <div class="tech-spec fade-in">
                         <h4>🔧 虛擬化技術</h4>
                         <p>使用 KVM 虛擬化搭配 Proxmox VE 實作底層節點管理，透過自建腳本與面板系統控制實例部署與審核</p>
                     </div>
-                    <div class="tech-spec">
+                    <div class="tech-spec fade-in">
                         <h4>🌐 多源部署</h4>
                         <p>異地多源部署策略，針對不同客戶需求精準配置資源與網路節點，保持高可控性與低超賣風險</p>
                     </div>
-                    <div class="tech-spec">
+                    <div class="tech-spec fade-in">
                         <h4>⚡ 網路優化</h4>
                         <p>依託 GCP 與主流機房骨幹網路，更針對地區性用戶洽談本地 ISP 合作，部署低延遲出入口</p>
                     </div>
-                    <div class="tech-spec">
+                    <div class="tech-spec fade-in">
                         <h4>🛡️ 客製化服務</h4>
                         <p>支援手動分配、自定 ISO、路由策略協調、DDoS 防護、MTU 調整等細節等級的定制</p>
                     </div>
-                    <div class="tech-spec">
+                    <div class="tech-spec fade-in">
                         <h4>🤝 ISP 直連服務</h4>
                         <p>與當地ISP直接溝通，為客戶在指定機房創建專屬VM實例，享受更直接的網路路徑和更好的性能</p>
                     </div>
-                    <div class="tech-spec">
+                    <div class="tech-spec fade-in">
                         <h4>🔄 動態IP選項</h4>
                         <p>提供動態出口IP服務，適合需要定期更換IP的應用場景，配合靈活的IP管理策略</p>
                     </div>
@@ -1363,7 +2466,7 @@
             <!-- Regions Detail -->
             <div class="regions-grid">
                 <!-- Hong Kong -->
-                <div class="region-card">
+                <div class="region-card fade-in">
                     <div class="region-header">
                         <div class="region-name">
                             <span class="region-flag">🇭🇰</span>
@@ -1403,7 +2506,7 @@
                 </div>
 
                 <!-- Japan -->
-                <div class="region-card">
+                <div class="region-card fade-in">
                     <div class="region-header">
                         <div class="region-name">
                             <span class="region-flag">🇯🇵</span>
@@ -1457,7 +2560,7 @@
                 </div>
 
                 <!-- United States -->
-                <div class="region-card">
+                <div class="region-card fade-in">
                     <div class="region-header">
                         <div class="region-name">
                             <span class="region-flag">🇺🇸</span>
@@ -1516,21 +2619,22 @@
             </div>
 
             <!-- Partnership Philosophy -->
-            <div style="background: #2b2d30; border: 1px solid #43454a; border-radius: 16px; padding: 2rem; margin: 3rem 0; text-align: left;">
-                <h4 style="color: #3592c4; margin-bottom: 1rem; font-weight: 600;">🤝 合作夥伴策略</h4>
-                <p style="color: #bbc0c6; line-height: 1.7; margin-bottom: 1rem;">
+            <div style="background: linear-gradient(135deg, rgba(43, 45, 48, 0.9) 0%, rgba(30, 31, 34, 0.9) 100%); border: 1px solid rgba(67, 69, 74, 0.5); border-radius: 16px; padding: 2rem; margin: 3rem 0; text-align: left; backdrop-filter: blur(15px); position: relative; overflow: hidden;">
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(53, 146, 196, 0.05) 0%, transparent 50%); opacity: 0; transition: opacity 0.3s ease;" onmouseover="this.style.opacity = '1'" onmouseout="this.style.opacity = '0'"></div>
+                <h4 style="color: #3592c4; margin-bottom: 1rem; font-weight: 600; position: relative; z-index: 2; text-shadow: 0 0 15px rgba(53, 146, 196, 0.4);">🤝 合作夥伴策略</h4>
+                <p style="color: #bbc0c6; line-height: 1.7; margin-bottom: 1rem; position: relative; z-index: 2;">
                     H-Net 不僅僅是資源的整合者，更是<strong>技術架構的設計師</strong>。我們與各類型合作夥伴建立的不是簡單的轉售關係，而是<strong>深度技術合作</strong>：
                 </p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.5rem;">
-                    <div style="padding: 1rem; background: #1e1f22; border: 1px solid #43454a; border-radius: 8px;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1.5rem; position: relative; z-index: 2;">
+                    <div style="padding: 1rem; background: rgba(30, 31, 34, 0.8); border: 1px solid rgba(67, 69, 74, 0.5); border-radius: 8px; transition: all 0.3s ease; backdrop-filter: blur(10px);" onmouseover="this.style.borderColor = '#3592c4'; this.style.transform = 'translateY(-3px)'" onmouseout="this.style.borderColor = 'rgba(67, 69, 74, 0.5)'; this.style.transform = 'translateY(0)'">
                         <strong style="color: #3592c4;">🏢 雲服務商</strong><br>
                         <span style="color: #9aa7b0; font-size: 0.9rem;">授權分割實例，定制化配置</span>
                     </div>
-                    <div style="padding: 1rem; background: #1e1f22; border: 1px solid #43454a; border-radius: 8px;">
+                    <div style="padding: 1rem; background: rgba(30, 31, 34, 0.8); border: 1px solid rgba(67, 69, 74, 0.5); border-radius: 8px; transition: all 0.3s ease; backdrop-filter: blur(10px);" onmouseover="this.style.borderColor = '#4db33d'; this.style.transform = 'translateY(-3px)'" onmouseout="this.style.borderColor = 'rgba(67, 69, 74, 0.5)'; this.style.transform = 'translateY(0)'">
                         <strong style="color: #4db33d;">📡 電信運營商</strong><br>
                         <span style="color: #9aa7b0; font-size: 0.9rem;">ISP直連，動態IP池管理</span>
                     </div>
-                    <div style="padding: 1rem; background: #1e1f22; border: 1px solid #43454a; border-radius: 8px;">
+                    <div style="padding: 1rem; background: rgba(30, 31, 34, 0.8); border: 1px solid rgba(67, 69, 74, 0.5); border-radius: 8px; transition: all 0.3s ease; backdrop-filter: blur(10px);" onmouseover="this.style.borderColor = '#ff9500'; this.style.transform = 'translateY(-3px)'" onmouseout="this.style.borderColor = 'rgba(67, 69, 74, 0.5)'; this.style.transform = 'translateY(0)'">
                         <strong style="color: #ff9500;">🏗️ 專業IDC</strong><br>
                         <span style="color: #9aa7b0; font-size: 0.9rem;">裸金屬部署，硬體定制</span>
                     </div>
@@ -1593,139 +2697,129 @@
 
     <section id="pricing" class="section section-dark">
         <div class="container">
-            <h2 class="section-title">服務方案</h2>
+            <h2 class="section-title">專屬定制服務</h2>
             <p class="section-subtitle">
-                以下是我們的基礎配置參考。每個實例都可以根據您的具體需求進行調整，包括節點選擇、網路配置、特殊軟體需求等。我們更偏向與客戶討論實際需求後，提供客製化的配置與報價。
+                我們不提供標準化套餐，而是根據每位客戶的技術需求量身打造專屬解決方案。每一個架構都經過精心設計，確保最佳性能表現與成本效益比。
             </p>
             
+            <!-- Consultation Process -->
+            <div style="background: linear-gradient(135deg, rgba(53, 146, 196, 0.1) 0%, rgba(43, 45, 48, 0.9) 100%); border: 2px solid rgba(53, 146, 196, 0.3); border-radius: 20px; padding: 3rem 2rem; margin: 3rem 0; text-align: center; backdrop-filter: blur(15px); position: relative; overflow: hidden;">
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(45deg, rgba(53, 146, 196, 0.05) 0%, transparent 50%); animation: shimmer 3s ease-in-out infinite;"></div>
+                <div style="position: relative; z-index: 2;">
+                    <h3 style="color: #3592c4; font-size: 1.8rem; font-weight: 700; margin-bottom: 1rem; text-shadow: 0 0 20px rgba(53, 146, 196, 0.5);">🎯 專業技術諮詢定制</h3>
+                    <p style="color: #bbc0c6; font-size: 1.1rem; line-height: 1.7; margin-bottom: 2rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                        我們的技術團隊將與您深度對話，理解您的業務需求、技術挑戰和性能目標。<br>
+                        從基礎架構到高端企業級解決方案，每一個配置都經過精密計算與優化。
+                    </p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin: 2rem 0;">
+                        <div style="padding: 1.5rem; background: rgba(30, 31, 34, 0.8); border: 1px solid rgba(53, 146, 196, 0.3); border-radius: 12px; backdrop-filter: blur(10px);">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔬</div>
+                            <h4 style="color: #3592c4; font-weight: 600; margin-bottom: 0.5rem;">需求分析</h4>
+                            <p style="color: #9aa7b0; font-size: 0.9rem;">深度技術需求評估</p>
+                        </div>
+                        <div style="padding: 1.5rem; background: rgba(30, 31, 34, 0.8); border: 1px solid rgba(53, 146, 196, 0.3); border-radius: 12px; backdrop-filter: blur(10px);">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚙️</div>
+                            <h4 style="color: #3592c4; font-weight: 600; margin-bottom: 0.5rem;">架構設計</h4>
+                            <p style="color: #9aa7b0; font-size: 0.9rem;">量身定制技術架構</p>
+                        </div>
+                        <div style="padding: 1.5rem; background: rgba(30, 31, 34, 0.8); border: 1px solid rgba(53, 146, 196, 0.3); border-radius: 12px; backdrop-filter: blur(10px);">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">💎</div>
+                            <h4 style="color: #3592c4; font-weight: 600; margin-bottom: 0.5rem;">精準報價</h4>
+                            <p style="color: #9aa7b0; font-size: 0.9rem;">透明化成本結構</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3>開發測試型</h3>
-                    <div class="price">$28</div>
-                    <div class="price-period">每月</div>
+                <div class="pricing-card fade-in">
+                    <div style="position: absolute; top: 1rem; right: 1rem; background: rgba(77, 179, 61, 0.2); color: #4db33d; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; border: 1px solid rgba(77, 179, 61, 0.3);">Entry Level</div>
+                    <h3>輕量級解決方案</h3>
+                    <div class="price-consultation">
+                        <div style="font-size: 2.2rem; background: linear-gradient(45deg, #3592c4, #2c82b4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700; margin-bottom: 0.5rem;">定制報價</div>
+                        <div style="color: #4db33d; font-weight: 600; font-size: 1rem; margin-bottom: 1rem;">起始 $20/月</div>
+                    </div>
                     <ul class="pricing-features">
-                        <li>2 vCPU (低超賣比)</li>
-                        <li>4GB 記憶體</li>
-                        <li>40GB NVMe 儲存</li>
-                        <li>2TB 月流量</li>
-                        <li>基礎節點選擇</li>
-                        <li>標準技術支援</li>
-                        <li>自定 ISO 支援</li>
+                        <li>個人開發與測試環境</li>
+                        <li>基礎虛擬化資源配置</li>
+                        <li>標準節點網路接入</li>
+                        <li>基本技術支援服務</li>
+                        <li>靈活的配置調整選項</li>
+                        <li>自定義 ISO 部署</li>
+                        <li>月度使用量優化建議</li>
                     </ul>
-                    <a href="#contact" class="cta-button">討論需求</a>
+                    <a href="#contact" class="cta-button enhanced-button">開始諮詢</a>
                 </div>
-                <div class="pricing-card popular">
-                    <h3>生產應用型</h3>
-                    <div class="price">$55</div>
-                    <div class="price-period">每月</div>
+                
+                <div class="pricing-card popular fade-in">
+                    <div style="position: absolute; top: 1rem; right: 1rem; background: rgba(255, 149, 0, 0.2); color: #ff9500; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; border: 1px solid rgba(255, 149, 0, 0.3);">Most Popular</div>
+                    <h3>企業級架構方案</h3>
+                    <div class="price-consultation">
+                        <div style="font-size: 2.2rem; background: linear-gradient(45deg, #3592c4, #2c82b4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700; margin-bottom: 0.5rem;">專業定制</div>
+                        <div style="color: #ff9500; font-weight: 600; font-size: 1rem; margin-bottom: 1rem;">依需求評估</div>
+                    </div>
                     <ul class="pricing-features">
-                        <li>4 vCPU (保證資源)</li>
-                        <li>8GB 記憶體</li>
-                        <li>80GB NVMe 儲存</li>
-                        <li>5TB 月流量</li>
-                        <li>多節點選擇權</li>
-                        <li>優先技術支援</li>
-                        <li>路由策略調整</li>
-                        <li>基礎 DDoS 防護</li>
-                        <li>動態IP選項 *</li>
+                        <li>生產環境高可用架構</li>
+                        <li>多節點負載均衡部署</li>
+                        <li>進階網路優化策略</li>
+                        <li>24/7 優先技術支援</li>
+                        <li>DDoS 防護與安全加固</li>
+                        <li>動態 IP 池管理 *</li>
+                        <li>流媒體加速優化 *</li>
+                        <li>定制監控與告警系統</li>
+                        <li>性能調優與容量規劃</li>
                     </ul>
-                    <a href="#contact" class="cta-button">討論需求</a>
+                    <a href="#contact" class="cta-button enhanced-button pulse">立即諮詢</a>
                 </div>
-                <div class="pricing-card">
-                    <h3>高需求定制型</h3>
-                    <div class="price">$120</div>
-                    <div class="price-period">每月起</div>
+                
+                <div class="pricing-card fade-in">
+                    <div style="position: absolute; top: 1rem; right: 1rem; background: rgba(53, 146, 196, 0.2); color: #3592c4; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; border: 1px solid rgba(53, 146, 196, 0.3);">Enterprise</div>
+                    <h3>頂級定制解決方案</h3>
+                    <div class="price-consultation">
+                        <div style="font-size: 2.2rem; background: linear-gradient(45deg, #3592c4, #2c82b4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700; margin-bottom: 0.5rem;">企業級</div>
+                        <div style="color: #3592c4; font-weight: 600; font-size: 1rem; margin-bottom: 1rem;">深度技術對接</div>
+                    </div>
                     <ul class="pricing-features">
-                        <li>8+ vCPU (專用資源)</li>
-                        <li>16GB+ 記憶體</li>
-                        <li>160GB+ NVMe 儲存</li>
-                        <li>無限月流量</li>
-                        <li>全節點訪問權</li>
-                        <li>24/7 技術支援</li>
-                        <li>完全客製化配置</li>
-                        <li>進階 DDoS 防護</li>
-                        <li>ISP 直連部署 *</li>
-                        <li>動態/靜態 IP 選擇 *</li>
-                        <li>流媒體優化 *</li>
-                        <li>MTU 與出口策略調整</li>
+                        <li>全球多地區混合雲架構</li>
+                        <li>ISP 直連專線部署 *</li>
+                        <li>專屬技術架構師服務</li>
+                        <li>白手套級實施與遷移</li>
+                        <li>企業級 SLA 保障協議</li>
+                        <li>定制化 API 與自動化</li>
+                        <li>合規性與審計支援</li>
+                        <li>災難恢復與備份策略</li>
+                        <li>專屬客戶成功經理</li>
+                        <li>季度技術架構審查</li>
                     </ul>
-                    <a href="#contact" class="cta-button">討論需求</a>
+                    <a href="#contact" class="cta-button enhanced-button">預約諮詢</a>
                 </div>
             </div>
+
+            <!-- Pricing Philosophy -->
+            <div style="background: linear-gradient(135deg, rgba(43, 45, 48, 0.9) 0%, rgba(30, 31, 34, 0.9) 100%); border: 1px solid rgba(67, 69, 74, 0.5); border-radius: 16px; padding: 2.5rem; margin: 3rem 0; backdrop-filter: blur(15px); position: relative; overflow: hidden;">
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(53, 146, 196, 0.05) 0%, transparent 50%); opacity: 0; transition: opacity 0.3s ease;" onmouseover="this.style.opacity = '1'" onmouseout="this.style.opacity = '0'"></div>
+                <div style="position: relative; z-index: 2;">
+                    <h4 style="color: #3592c4; font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; text-shadow: 0 0 15px rgba(53, 146, 196, 0.4);">💡 定價理念</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                        <div>
+                            <h5 style="color: #ffffff; font-weight: 600; margin-bottom: 0.8rem;">透明化成本結構</h5>
+                            <p style="color: #bbc0c6; line-height: 1.6; font-size: 0.95rem;">
+                                每一項技術服務的成本都會清楚說明，包括基礎設施成本、技術實施費用和持續維護支援。沒有隱藏費用，沒有意外帳單。
+                            </p>
+                        </div>
+                        <div>
+                            <h5 style="color: #ffffff; font-weight: 600; margin-bottom: 0.8rem;">價值導向定價</h5>
+                            <p style="color: #bbc0c6; line-height: 1.6; font-size: 0.95rem;">
+                                我們的定價基於為您創造的技術價值，而非簡單的資源堆疊。專業的技術諮詢、架構設計和持續優化都是服務的重要組成部分。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <p class="pricing-footnote">
-                * 標記服務不適用於中國大陸地區
+                * 標記服務不適用於中國大陸地區 | 所有方案均支援靈活的資源調整與技術升級
             </p>
-            
-            <!-- Feature Comparison Table -->
-            <div class="feature-comparison">
-                <h4 style="color: #3592c4; margin-bottom: 1rem; font-weight: 600;">功能對比表</h4>
-                <table class="comparison-table">
-                    <thead>
-                        <tr>
-                            <th>功能特色</th>
-                            <th>開發測試型</th>
-                            <th>生產應用型</th>
-                            <th>高需求定制型</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>KVM 虛擬化</td>
-                            <td><span class="check-mark">✓</span></td>
-                            <td><span class="check-mark">✓</span></td>
-                            <td><span class="check-mark">✓</span></td>
-                        </tr>
-                        <tr>
-                            <td>自定 ISO</td>
-                            <td><span class="check-mark">✓</span></td>
-                            <td><span class="check-mark">✓</span></td>
-                            <td><span class="check-mark">✓</span></td>
-                        </tr>
-                        <tr>
-                            <td>多節點選擇</td>
-                            <td>基礎</td>
-                            <td><span class="check-mark">✓</span></td>
-                            <td><span class="check-mark">✓</span></td>
-                        </tr>
-                        <tr>
-                            <td>DDoS 防護</td>
-                            <td><span class="x-mark">✗</span></td>
-                            <td>基礎</td>
-                            <td>進階</td>
-                        </tr>
-                        <tr>
-                            <td>動態 IP</td>
-                            <td><span class="x-mark">✗</span></td>
-                            <td><span class="check-mark">✓</span></td>
-                            <td><span class="check-mark">✓</span></td>
-                        </tr>
-                        <tr>
-                            <td>ISP 直連</td>
-                            <td><span class="x-mark">✗</span></td>
-                            <td><span class="x-mark">✗</span></td>
-                            <td><span class="check-mark">✓</span></td>
-                        </tr>
-                        <tr>
-                            <td>流媒體優化</td>
-                            <td><span class="x-mark">✗</span></td>
-                            <td><span class="x-mark">✗</span></td>
-                            <td><span class="check-mark">✓</span></td>
-                        </tr>
-                        <tr>
-                            <td>24/7 支援</td>
-                            <td>工作日</td>
-                            <td>優先</td>
-                            <td><span class="check-mark">✓</span></td>
-                        </tr>
-                        <tr>
-                            <td>SLA 保證</td>
-                            <td>99.5%</td>
-                            <td>99.9%</td>
-                            <td>99.99%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
     </section>
 
@@ -1740,7 +2834,7 @@
                 <div class="email-card">
                     <h3>直接聯繫</h3>
                     <p>偏好直接溝通？歡迎發郵件討論您的需求</p>
-                    <a href="mailto:h@devhys.com" class="email-link">
+                    <a href="mailto:h@devhys.com" class="email-link enhanced-button">
                         📧 h@devhys.com
                     </a>
                 </div>
@@ -1751,7 +2845,7 @@
             </div>
             
             <div class="contact-form">
-                <form>
+                <form id="contactForm">
                     <div class="form-group">
                         <label for="name">姓名 / 暱稱</label>
                         <input type="text" id="name" name="name" required>
@@ -1812,7 +2906,10 @@
                             <option value="flexible">時間彈性</option>
                         </select>
                     </div>
-                    <button type="submit" class="form-button">生成郵件內容</button>
+                    <button type="submit" class="form-button enhanced-button">
+                        <span class="button-text">生成郵件內容</span>
+                        <div class="loading-spinner" style="display: none;"></div>
+                    </button>
                 </form>
             </div>
         </div>
@@ -1828,84 +2925,43 @@
     </footer>
 
     <script>
-        // Smooth scrolling
+        // Enhanced scroll progress
+        function updateScrollProgress() {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (scrollTop / scrollHeight) * 100;
+            document.querySelector('.scroll-progress').style.width = scrolled + '%';
+        }
+
+        // Enhanced header scroll effect
+        function updateHeader() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        }
+
+        // Smooth scrolling with enhanced easing
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    // Tech tag hover effects
-        document.querySelectorAll('.tech-tag').forEach(tag => {
-            tag.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-2px)';
-                this.style.boxShadow = '0 4px 8px rgba(53, 146, 196, 0.2)';
-            });
-            
-            tag.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-                this.style.boxShadow = 'none';
-            });
-        });
+                    const headerOffset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
-        // Infrastructure section animations
-        const infrastructureObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    // Animate region cards
-                    if (entry.target.classList.contains('region-card')) {
-                        setTimeout(() => {
-                            entry.target.style.transform = 'translateY(0)';
-                            entry.target.style.opacity = '1';
-                        }, entry.target.dataset.delay || 0);
-                    }
-                    
-                    // Animate map nodes
-                    if (entry.target.classList.contains('map-node')) {
-                        setTimeout(() => {
-                            entry.target.style.transform = 'scale(1)';
-                            entry.target.style.opacity = '1';
-                        }, entry.target.dataset.delay || 0);
-                    }
-                }
-            });
-        }, { threshold: 0.1 });
-
-        // Set up region card animations
-        document.querySelectorAll('.region-card').forEach((card, index) => {
-            card.style.transform = 'translateY(30px)';
-            card.style.opacity = '0';
-            card.style.transition = 'all 0.6s ease';
-            card.dataset.delay = `${index * 200}ms`;
-            infrastructureObserver.observe(card);
-        });
-
-        // Set up map node animations
-        document.querySelectorAll('.map-node').forEach((node, index) => {
-            node.style.transform = 'scale(0)';
-            node.style.opacity = '0';
-            node.style.transition = 'all 0.5s ease';
-            node.dataset.delay = `${index * 300}ms`;
-            infrastructureObserver.observe(node);
-        });
-
-        // Partner row hover effects
-        document.querySelectorAll('.partner-row').forEach(row => {
-            row.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateX(5px)';
-            });
-            
-            row.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateX(0)';
-            });
-        });
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
                 }
             });
         });
 
-        // Simple scroll animations
+        // Enhanced intersection observer for animations
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -1916,28 +2972,63 @@
                 if (entry.isIntersecting) {
                     entry.target.style.animationDelay = entry.target.dataset.delay || '0s';
                     entry.target.classList.add('fade-in');
+                    
+                    // Add stagger effect for cards in grid
+                    if (entry.target.classList.contains('feature-card') || 
+                        entry.target.classList.contains('tech-spec') || 
+                        entry.target.classList.contains('pricing-card') ||
+                        entry.target.classList.contains('region-card')) {
+                        
+                        const siblings = Array.from(entry.target.parentElement.children);
+                        const index = siblings.indexOf(entry.target);
+                        entry.target.style.animationDelay = `${index * 0.1}s`;
+                    }
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.feature-card').forEach((card, index) => {
-            card.dataset.delay = `${index * 0.1}s`;
-            observer.observe(card);
+        // Observe all animatable elements
+        document.querySelectorAll('.feature-card, .tech-spec, .pricing-card, .region-card, .infrastructure-stat').forEach((el, index) => {
+            el.dataset.delay = `${index * 0.1}s`;
+            observer.observe(el);
         });
 
-        // Form submission - generate email content
-        document.querySelector('form').addEventListener('submit', function(e) {
+        // Enhanced parallax effect
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.parallax-element');
+            
+            parallaxElements.forEach(element => {
+                const speed = element.dataset.speed || 0.5;
+                const yPos = -(scrolled * speed);
+                element.style.transform = `translate3d(0, ${yPos}px, 0)`;
+            });
+        }
+
+        // Enhanced form submission with loading states
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const formData = new FormData(this);
-            const data = {};
-            for (let [key, value] of formData.entries()) {
-                data[key] = value;
-            }
+            const button = this.querySelector('.form-button');
+            const buttonText = button.querySelector('.button-text');
+            const spinner = button.querySelector('.loading-spinner');
             
-            // Generate email content
-            const emailSubject = `H-Net VPS 服務詢問 - ${data.name || '客戶'}`;
-            const emailBody = `
+            // Show loading state
+            buttonText.style.display = 'none';
+            spinner.style.display = 'block';
+            button.disabled = true;
+            
+            // Simulate processing time
+            setTimeout(() => {
+                const formData = new FormData(this);
+                const data = {};
+                for (let [key, value] of formData.entries()) {
+                    data[key] = value;
+                }
+                
+                // Generate email content
+                const emailSubject = `H-Net VPS 服務詢問 - ${data.name || '客戶'}`;
+                const emailBody = `
 H-Net 團隊您好，
 
 我對 H-Net 的 VPS 服務有興趣，以下是我的需求資訊：
@@ -1956,27 +3047,171 @@ H-Net 團隊您好，
 ${data['technical-requirements'] || '無額外說明'}
 
 期待您的回覆，謝謝！
-            `.trim();
-            
-            // Create success message with email content
-            const form = this;
-            const successMessage = document.createElement('div');
-            successMessage.innerHTML = `
-                <div style="background: #2b2d30; border: 1px solid #3592c4; padding: 2rem; border-radius: 12px; margin-top: 2rem;">
-                    <h4 style="color: #3592c4; margin-bottom: 1rem; font-size: 1.25rem; font-weight: 600;">📋 請複製以下內容發送到 h@devhys.com</h4>
-                    <div class="code-block" style="margin: 1rem 0;">${emailBody}</div>
-                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
-                        <button onclick="navigator.clipboard.writeText(\`${emailBody.replace(/`/g, '\\`')}\`); this.innerHTML='✓ 已複製到剪貼板'; this.style.background='#4db33d';" style="background: #3592c4; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.2s ease;">📋 複製內容</button>
-                        <a href="mailto:h@devhys.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}" style="background: #2c82b4; color: white; text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 8px; display: inline-block; font-weight: 500; transition: all 0.2s ease;">📧 開啟郵件程式</a>
+                `.trim();
+                
+                // Hide loading, show success
+                spinner.style.display = 'none';
+                buttonText.textContent = '✓ 內容已生成';
+                buttonText.style.display = 'block';
+                button.style.background = 'linear-gradient(45deg, #4db33d, #45a535)';
+                
+                // Create enhanced success message
+                const successMessage = document.createElement('div');
+                successMessage.innerHTML = `
+                    <div style="background: linear-gradient(135deg, rgba(43, 45, 48, 0.95) 0%, rgba(30, 31, 34, 0.95) 100%); border: 2px solid #3592c4; padding: 2.5rem; border-radius: 20px; margin-top: 2rem; backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(53, 146, 196, 0.2); position: relative; overflow: hidden;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(53, 146, 196, 0.1) 0%, transparent 50%);"></div>
+                        <div style="position: relative; z-index: 2;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                                <div class="success-checkmark" style="width: 30px; height: 30px;">
+                                    <svg viewBox="0 0 52 52">
+                                        <circle class="success-checkmark-check" cx="26" cy="26" r="25" fill="none"/>
+                                        <path class="success-checkmark-check" fill="none" d="m14.1 27.2l7.1 7.2 16.7-16.8"/>
+                                    </svg>
+                                </div>
+                                <h4 style="color: #3592c4; font-size: 1.25rem; font-weight: 600; text-shadow: 0 0 15px rgba(53, 146, 196, 0.4);">📋 請複製以下內容發送到 h@devhys.com</h4>
+                            </div>
+                            <div class="code-block" style="margin: 1rem 0; max-height: 200px; overflow-y: auto;">${emailBody}</div>
+                            <div style="display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap;">
+                                <button onclick="copyToClipboard(\`${emailBody.replace(/`/g, '\\`')}\`, this)" style="background: linear-gradient(45deg, #3592c4, #2c82b4); color: white; border: none; padding: 0.875rem 1.5rem; border-radius: 50px; cursor: pointer; font-weight: 500; transition: all 0.3s ease; position: relative; overflow: hidden;" class="enhanced-button">📋 複製內容</button>
+                                <a href="mailto:h@devhys.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}" style="background: linear-gradient(45deg, #2c82b4, #3592c4); color: white; text-decoration: none; padding: 0.875rem 1.5rem; border-radius: 50px; display: inline-block; font-weight: 500; transition: all 0.3s ease; position: relative; overflow: hidden;" class="enhanced-button">📧 開啟郵件程式</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
+                
+                this.appendChild(successMessage);
+                
+                // Scroll to the message with smooth animation
+                setTimeout(() => {
+                    successMessage.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'center' 
+                    });
+                }, 100);
+                
+            }, 1500); // Simulate processing time
+        });
+
+        // Enhanced copy to clipboard function
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '✓ 已複製到剪貼板';
+                button.style.background = 'linear-gradient(45deg, #4db33d, #45a535)';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = 'linear-gradient(45deg, #3592c4, #2c82b4)';
+                }, 2000);
+            }).catch(err => {
+                console.error('複製失敗:', err);
+                button.innerHTML = '❌ 複製失敗';
+                button.style.background = 'linear-gradient(45deg, #ff6b6b, #ff5252)';
+            });
+        }
+
+        // Enhanced tech tag interactions
+        document.querySelectorAll('.tech-tag').forEach(tag => {
+            tag.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.05)';
+                this.style.boxShadow = '0 8px 25px rgba(53, 146, 196, 0.3)';
+            });
             
-            form.appendChild(successMessage);
+            tag.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+                this.style.boxShadow = 'none';
+            });
+        });
+
+        // Enhanced region card partner row animations
+        document.querySelectorAll('.region-card').forEach(card => {
+            const partnerRows = card.querySelectorAll('.partner-row');
             
-            // Scroll to the message
+            card.addEventListener('mouseenter', () => {
+                partnerRows.forEach((row, index) => {
+                    setTimeout(() => {
+                        row.style.transform = 'translateX(8px)';
+                    }, index * 50);
+                });
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                partnerRows.forEach((row, index) => {
+                    setTimeout(() => {
+                        row.style.transform = 'translateX(0)';
+                    }, index * 25);
+                });
+            });
+        });
+
+        // Enhanced particle system
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particle.style.opacity = Math.random() * 0.5 + 0.1;
+            
+            document.querySelector('.particles').appendChild(particle);
+            
             setTimeout(() => {
-                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                particle.remove();
+            }, 20000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 3000);
+
+        // Initialize particles
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createParticle, i * 1000);
+        }
+
+        // Event listeners
+        window.addEventListener('scroll', () => {
+            updateScrollProgress();
+            updateHeader();
+            updateParallax();
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateScrollProgress();
+            updateHeader();
+            
+            // Animate elements on load
+            setTimeout(() => {
+                document.querySelectorAll('.fade-in').forEach((el, index) => {
+                    setTimeout(() => {
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    }, index * 100);
+                });
+            }, 500);
+        });
+
+        // Enhanced performance optimizations
+        let ticking = false;
+
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    updateScrollProgress();
+                    updateHeader();
+                    updateParallax();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', requestTick);
+
+        // Add resize handler for responsive animations
+        window.addEventListener('resize', () => {
+            // Recalculate animations on resize
+            setTimeout(() => {
+                updateScrollProgress();
             }, 100);
         });
     </script>
